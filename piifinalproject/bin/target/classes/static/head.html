@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PII Detection & De-identification — Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#041224;
+      --card: rgba(255,255,255,0.03);
+      --glass: rgba(255,255,255,0.04);
+      --accent: #00d1ff;
+      --muted: rgba(255,255,255,0.6);
+      --font:'Inter', system-ui, Arial, sans-serif;
+    }
+    *{box-sizing:border-box;}
+    html,body{height:100%;margin:0;font-family:var(--font);background:var(--bg);color:#eafcff;}
+    body::before{
+      content:"";position:fixed;inset:0;
+      background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1950&q=80');
+      background-size:cover;background-position:center;opacity:0.18;filter:grayscale(10%);z-index:0;
+    }
+    body::after{content:'';position:fixed;inset:0;background:linear-gradient(180deg,rgba(2,8,23,0.6),rgba(2,8,23,0.85));z-index:0;}
+    .site{position:relative;z-index:1;max-width:1200px;margin:32px auto;padding:28px;}
+    header{display:flex;align-items:center;gap:16px;padding:18px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:0 6px 30px rgba(2,8,23,0.6);border:1px solid rgba(0,209,255,0.06);}
+    .logo{display:flex;align-items:center;gap:12px;}
+    .logo img{width:52px;height:52px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#007bb8);padding:8px;box-shadow:0 6px 18px rgba(0,209,255,0.06);}
+    header h1{font-size:20px;margin:0;color:var(--accent);}
+    header p{margin:0;color:var(--muted);font-size:13px;}
+    .hero{display:flex;gap:24px;align-items:flex-start;margin-top:20px;}
+    .hero .left{flex:1;}
+    .hero .right{width:340px;}
+    .card{background:var(--card);padding:20px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 8px 40px rgba(2,8,23,0.6);}
+    .about h2{color:var(--accent);margin:0 0 8px 0;}
+    .about p{color:var(--muted);line-height:1.5;}
+    .features{display:flex;gap:12px;margin-top:16px;}
+    .feature{flex:1;padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(0,209,255,0.03);}
+    .feature h4{margin:0 0 6px 0;color:var(--accent);}
+    .feature p{margin:0;color:var(--muted);font-size:13px;}
+    .forms{margin-top:26px;display:flex;flex-direction:column;gap:20px;}
+    .text-row{display:flex;gap:18px;align-items:flex-start;}
+    .input-box,.output-box{flex:1;} 
+    textarea,.result-pre{
+      width:100%;
+      min-height:160px;
+      padding:14px;
+      border-radius:12px;
+      background:var(--glass);
+      border:1px solid rgba(255,255,255,0.03);
+      color:#eafcff;
+      font-size:14px;
+      font-family:var(--font);
+      resize:vertical;
+    }
+    .result-pre{overflow:auto;}
+    .controls{display:flex;gap:12px;align-items:center;margin-top:12px;}
+    .btn{background:linear-gradient(90deg,var(--accent),#00a0c7);color:#00131a;padding:10px 14px;border-radius:10px;border:none;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(0,209,255,0.06);transition:transform .18s ease;}
+    .btn:hover{transform:translateY(-3px);}
+    .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(0,209,255,0.12);}
+    .file-card{display:flex;flex-direction:column;gap:12px;}
+    .dropzone{border:2px dashed rgba(0,209,255,0.08);padding:18px;border-radius:12px;text-align:center;color:var(--muted);background:linear-gradient(180deg,transparent,rgba(255,255,255,0.01));cursor:pointer;}
+    .dropzone.drag{border-color:var(--accent);color:var(--accent);}
+    .file-list{display:flex;flex-direction:column;gap:8px;}
+    .file-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.02);}
+    footer{margin-top:30px;padding:18px;text-align:center;color:var(--muted);font-size:13px;}
+    @media (max-width:980px){
+      .text-row{flex-direction:column;}
+      .output-box{width:100%;}
+      .hero{flex-direction:column;}
+      .hero .right{width:100%;}
+    }
+    .accent-line{height:4px;width:100%;border-radius:8px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.15;margin-top:12px;}
+    textarea:focus,.result-pre:focus{outline:2px solid rgba(0,209,255,0.08);}
+  </style>
+</head>
+<body>
+  <div class="site">
+    <header>
+      <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png" alt="logo"/>
+        <div>
+          <h1>PII Detection & De-identification</h1>
+          <p>Protecting sensitive data — identify, mask, and report</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="hero">
+      <div class="left">
+        <section class="card about">
+          <h2>About PII Detection</h2>
+          <p>
+            This portal detects personally identifiable information (PII) such as Aadhaar numbers, PAN, phone numbers, emails and more. It can de-identify (mask) detected values so data can be used safely for analysis while preserving privacy.
+          </p>
+          <div class="accent-line"></div>
+          <div class="features">
+            <div class="feature">
+              <h4>Accurate Masking</h4>
+              <p>Regex + heuristic based detection with configurable masks to suit formats (India-specific patterns included).</p>
+            </div>
+            <div class="feature">
+              <h4>Local Processing</h4>
+              <p>Process text locally or upload CSVs. No data is sent to third-party services by default.</p>
+            </div>
+            <div class="feature">
+              <h4>Report Generation</h4>
+              <p>Generate reports summarizing detected PII counts and masked outputs for auditing.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- FORMS -->
+        <section class="card forms">
+          <!-- TEXT FORM -->
+          <div>
+            <h3 style="color:var(--accent);margin:0 0 12px 0">Text Detection & De-identification</h3>
+            <div class="text-row">
+              <div class="input-box">
+                <label style="color:var(--muted);font-size:13px;margin-bottom:8px;display:block">Input Text</label>
+                <textarea id="textInput" placeholder="Paste or type text that may contain PII..."></textarea>
+                <div class="controls">
+                  <button class="btn" id="processBtn">Process Text</button>
+                  <button class="btn ghost" id="clearBtn">Clear</button>
+                  <div style="flex:1"></div>
+                  <div style="color:var(--muted);font-size:13px">Status: <span id="statusText">idle</span></div>
+                </div>
+              </div>
+              <div class="output-box">
+                <label style="color:var(--muted);font-size:13px;display:block;margin-bottom:8px">Result (Masked Output)</label>
+                <textarea class="result-pre" id="resultOutput" readonly>No output yet. Process text to see masked result here.</textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- CSV FORM -->
+          <div style="margin-top:20px">
+            <h3 style="color:var(--accent);margin:0 0 12px 0">CSV Upload & Report</h3>
+            <div class="file-card">
+              <div id="dropzone" class="dropzone">Drag & drop a CSV file here, or click to choose a file</div>
+              <input id="fileInput" type="file" accept=".csv" style="display:none" />
+              <div class="file-list" id="fileList"></div>
+              <div style="display:flex;gap:10px;align-items:center;margin-top:8px">
+                <button class="btn" id="uploadBtn">Upload & Process</button>
+                <button class="btn" id="downloadMaskedBtn">Download Masked CSV</button>
+                <button class="btn" id="downloadReportBtn">Download Report</button>
+                <div style="flex:1"></div>
+                <div style="color:var(--muted);font-size:13px" id="fileStatus">No file</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <footer>© 2025 PII Detection Portal. All rights reserved.</footer>
+
+  <script>
+    // TEXT PROCESS
+    const processBtn = document.getElementById('processBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const textInput = document.getElementById('textInput');
+    const resultOutput = document.getElementById('resultOutput');
+    const statusText = document.getElementById('statusText');
+
+    processBtn.addEventListener('click', () => {
+      const text = textInput.value.trim();
+      if(!text){alert('Please enter text');return;}
+      statusText.innerText = 'processing...';
+      fetch('/check',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({text})
+      }).then(res=>res.json()).then(data=>{
+        if(data.result){resultOutput.value=data.result;statusText.innerText='done';}
+        else{resultOutput.value='Error processing';statusText.innerText='error';}
+      }).catch(err=>{resultOutput.value='Error';statusText.innerText='error';});
+    });
+
+    clearBtn.addEventListener('click',()=>{
+      textInput.value='';
+      resultOutput.value='No output yet. Process text to see masked result here.';
+      statusText.innerText='idle';
+    });
+    const dropzone = document.getElementById('dropzone');
+    const fileInputElem = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    const uploadBtnElem = document.getElementById('uploadBtn');
+    let currentFile=null;
+
+    dropzone.addEventListener('click',()=>fileInputElem.click());
+    dropzone.addEventListener('dragover',e=>{e.preventDefault();dropzone.classList.add('drag');});
+    dropzone.addEventListener('dragleave',()=>dropzone.classList.remove('drag'));
+    dropzone.addEventListener('drop',e=>{
+      e.preventDefault();dropzone.classList.remove('drag');
+      if(e.dataTransfer.files.length>0){currentFile=e.dataTransfer.files[0];updateFileList();}
+    });
+    fileInputElem.addEventListener('change',e=>{if(e.target.files.length>0){currentFile=e.target.files[0];updateFileList();}});
+    function updateFileList(){
+      fileList.innerHTML=`<div class="file-row">${currentFile.name}</div>`;
+      document.getElementById('fileStatus').innerText=currentFile.name;
+    }
+
+    uploadBtnElem.addEventListener('click',()=>{
+      if(!currentFile){alert('Select a file first');return;}
+      const formData=new FormData();
+      formData.append('file',currentFile);
+      fetch('/upload',{method:'POST',body:formData})
+        .then(res=>res.json())
+        .then(data=>{
+          if(data.message){alert(data.message);}
+        }).catch(err=>{alert('Error uploading file');});
+    });
+
+    document.getElementById('downloadMaskedBtn').addEventListener('click',()=>{window.location.href='/downloadMasked';});
+    document.getElementById('downloadReportBtn').addEventListener('click',()=>{window.location.href='/download';});
+  </script>
+</body>
+</html>

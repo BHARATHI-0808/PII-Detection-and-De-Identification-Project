@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PII Masking Report</title>
+  <style type="text/css">
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      background: #fff;
+      color: #000;
+    }
+
+    .container {
+      width: 95%;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      border-bottom: 2px solid #000;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      border-bottom: 1px solid #000;
+      padding-bottom: 5px;
+      margin-top: 30px;
+      font-size: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      border: 1px solid #000;
+      padding: 8px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f2f2f2;
+    }
+
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>PII Masking Report</h1>
+
+    <!-- Aadhaar Section -->
+    <div class="section">
+      <h2>Aadhaar Detection</h2>
+      <table>
+        <tr><th>Metric</th><th>Value</th></tr>
+        <tr><td>Total Present</td><td>{{AADHAAR_TOTAL}}</td></tr>
+        <tr><td>Total Detected</td><td>{{AADHAAR_DETECTED}}</td></tr>
+        <tr><td>True Positive</td><td>{{AADHAAR_TP}}</td></tr>
+        <tr><td>True Negative</td><td>{{AADHAAR_TN}}</td></tr>
+        <tr><td>False Positive</td><td>{{AADHAAR_FP}}</td></tr>
+        <tr><td>False Negative</td><td>{{AADHAAR_FN}}</td></tr>
+        <tr><td>Accuracy</td><td>{{AADHAAR_ACCURACY}}%</td></tr>
+      </table>
+    </div>
+
+    <!-- PAN Section -->
+    <div class="section">
+      <h2>PAN Detection</h2>
+      <table>
+        <tr><th>Metric</th><th>Value</th></tr>
+        <tr><td>Total Present</td><td>{{PAN_TOTAL}}</td></tr>
+        <tr><td>Total Detected</td><td>{{PAN_DETECTED}}</td></tr>
+        <tr><td>True Positive</td><td>{{PAN_TP}}</td></tr>
+        <tr><td>True Negative</td><td>{{PAN_TN}}</td></tr>
+        <tr><td>False Positive</td><td>{{PAN_FP}}</td></tr>
+        <tr><td>False Negative</td><td>{{PAN_FN}}</td></tr>
+        <tr><td>Accuracy</td><td>{{PAN_ACCURACY}}%</td></tr>
+      </table>
+    </div>
+
+    <!-- Email Section -->
+    <div class="section">
+      <h2>Email Detection</h2>
+      <table>
+        <tr><th>Metric</th><th>Value</th></tr>
+        <tr><td>Total Present</td><td>{{EMAIL_TOTAL}}</td></tr>
+        <tr><td>Total Detected</td><td>{{EMAIL_DETECTED}}</td></tr>
+        <tr><td>True Positive</td><td>{{EMAIL_TP}}</td></tr>
+        <tr><td>True Negative</td><td>{{EMAIL_TN}}</td></tr>
+        <tr><td>False Positive</td><td>{{EMAIL_FP}}</td></tr>
+        <tr><td>False Negative</td><td>{{EMAIL_FN}}</td></tr>
+        <tr><td>Accuracy</td><td>{{EMAIL_ACCURACY}}%</td></tr>
+      </table>
+    </div>
+
+    <!-- Credit Card Section -->
+    <div class="section">
+      <h2>Credit Card Detection</h2>
+      <table>
+        <tr><th>Metric</th><th>Value</th></tr>
+        <tr><td>Total Present</td><td>{{CREDIT_TOTAL}}</td></tr>
+        <tr><td>Total Detected</td><td>{{CREDIT_DETECTED}}</td></tr>
+        <tr><td>True Positive</td><td>{{CREDIT_TP}}</td></tr>
+        <tr><td>True Negative</td><td>{{CREDIT_TN}}</td></tr>
+        <tr><td>False Positive</td><td>{{CREDIT_FP}}</td></tr>
+        <tr><td>False Negative</td><td>{{CREDIT_FN}}</td></tr>
+        <tr><td>Accuracy</td><td>{{CREDIT_ACCURACY}}%</td></tr>
+      </table>
+    </div>
+    <div class="section">
+      <h2>Phone No Detection</h2>
+      <table>
+        <tr><th>Metric</th><th>Value</th></tr>
+        <tr><td>Total Present</td><td>{{ph_TOTAL}}</td></tr>
+        <tr><td>Total Detected</td><td>{{ph_DETECTED}}</td></tr>
+        <tr><td>True Positive</td><td>{{ph_TP}}</td></tr>
+        <tr><td>True Negative</td><td>{{ph_TN}}</td></tr>
+        <tr><td>False Positive</td><td>{{ph_FP}}</td></tr>
+        <tr><td>False Negative</td><td>{{ph_FN}}</td></tr>
+        <tr><td>Accuracy</td><td>{{ph_ACCURACY}}%</td></tr>
+      </table>
+    </div>
+    <div class="section">
+      <h2>Driving Licence Detection</h2>
+      <table>
+        <tr><th>Metric</th><th>Value</th></tr>
+        <tr><td>Total Present</td><td>{{dl_TOTAL}}</td></tr>
+        <tr><td>Total Detected</td><td>{{dl_DETECTED}}</td></tr>
+        <tr><td>True Positive</td><td>{{dl_TP}}</td></tr>
+        <tr><td>True Negative</td><td>{{dl_TN}}</td></tr>
+        <tr><td>False Positive</td><td>{{dl_FP}}</td></tr>
+        <tr><td>False Negative</td><td>{{dl_FN}}</td></tr>
+        <tr><td>Accuracy</td><td>{{dl_ACCURACY}}%</td></tr>
+      </table>
+    </div>
+
+    <div class="footer">
+      <p>Generated Report &#169; 2025</p>
+    </div>
+  </div>
+</body>
+</html>

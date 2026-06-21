@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>PII Masking</title>
+</head>
+<body>
+    <h1>Upload CSV for Masking</h1>
+    <form method="post" enctype="multipart/form-data" action="/upload">
+        <input type="file" name="file" accept=".csv" required>
+        <button type="submit">Upload & Process</button>
+    </form>
+</body>
+</html>

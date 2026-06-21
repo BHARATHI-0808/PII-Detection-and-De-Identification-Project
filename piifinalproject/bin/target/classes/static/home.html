@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Your Data</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      font-family: Arial, sans-serif;
+      color: #0ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .wrapper {
+      display: flex;
+      gap: 30px;
+    }
+    .container {
+      width: 380px;
+      background: rgba(0,0,0,0.9);
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 0 30px #00f5ff;
+      animation: glow 2s infinite alternate;
+    }
+    @keyframes glow {
+      from { box-shadow: 0 0 20px #00f5ff; }
+      to { box-shadow: 0 0 40px cyan; }
+    }
+    h2 {
+      color: #00f5ff;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      text-align: left;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 15px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    input[type="text"] {
+      background: #111;
+      color: #0ff;
+      border: 1px solid #00f5ff;
+    }
+    button {
+      background: linear-gradient(to right, cyan, blue);
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px cyan;
+    }
+    /* Animated upload button */
+    .upload-btn {
+      background: linear-gradient(270deg, cyan, blue);
+      background-size: 200% 200%;
+      animation: gradientMove 3s infinite;
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .result-box {
+      background: #111;
+      padding: 10px;
+      border-radius: 6px;
+      color: #0ff;
+      text-align: left;
+      min-height: 40px;
+      border: 1px solid #00f5ff;
+    }
+    /* File input styling */
+    #fileInput {
+      display: none;
+    }
+    .file-label {
+      display: inline-block;
+      padding: 10px;
+      width: 100%;
+      text-align: center;
+      background: linear-gradient(270deg, #00f5ff, #0077ff);
+      background-size: 200% 200%;
+      animation: gradientMove 3s infinite;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-bottom: 15px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .file-label:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px cyan;
+    }
+    .file-name {
+      font-size: 12px;
+      color: #0ff;
+      margin-top: -10px;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- LEFT: Text Input -->
+    <div class="container">
+      <h2>Mask Text</h2>
+      <label for="textInput">Enter Text</label>
+      <input type="text" id="textInput" placeholder="Type something...">
+      <button onclick="submitText()">Submit Text</button>
+      <label>Result:</label>
+      <div class="result-box" id="resultBox"></div>
+    </div>
+
+    <!-- RIGHT: CSV Upload -->
+    <div class="container">
+      <h2>Mask CSV File</h2>
+      <label for="fileInput" class="file-label">Choose CSV File</label>
+      <input type="file" id="fileInput" accept=".csv" onchange="showFileName()">
+      <div class="file-name" id="fileName">No file chosen</div>
+      <button class="upload-btn" onclick="uploadCSV()">Upload & Generate Report</button>
+      <button onclick="downloadReport()">Download Report</button>
+      <button onclick="downloadMasked()">Download Masked CSV</button>
+    </div>
+  </div>
+
+  <script>
+    // Show selected file name
+    function showFileName() {
+      const fileInput = document.getElementById("fileInput");
+      const fileName = document.getElementById("fileName");
+      fileName.innerText = fileInput.files.length > 0 
+        ? fileInput.files[0].name 
+        : "No file chosen";
+    }
+
+    // Submit text via AJAX
+    function submitText() {
+      const textValue = document.getElementById("textInput").value;
+
+      fetch("http://localhost:8080/check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: textValue })
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("resultBox").innerText = 
+          data.result || data.maskedText || data.message || "No result returned";
+      })
+      .catch(err => {
+        document.getElementById("resultBox").innerText = "Error: " + err;
+      });
+    }
+
+    // Upload CSV via AJAX
+    function uploadCSV() {
+      const fileInput = document.getElementById("fileInput").files[0];
+      if (!fileInput) {
+        alert("Please select a CSV file first.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", fileInput);
+
+      fetch("http://localhost:8080/upload", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert(data.message || "CSV processed successfully.");
+      })
+      .catch(err => {
+        alert("Error: " + err);
+      });
+    }
+
+    // Download Report
+    function downloadReport() {
+      window.location.href = "http://localhost:8080/download";
+    }
+
+    // Download Masked CSV
+    function downloadMasked() {
+      window.location.href = "http://localhost:8080/downloadMasked";
+    }
+  </script>
+</body>
+</html>
